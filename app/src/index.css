@@ -1,0 +1,14 @@
+:root{
+    --bg_color : lightblue;
+}
+
+body{
+    background-color:  var(--bg_color);
+}
+
+/*
+Keep the same background color even when going fullscreen.
+*/
+::backdrop{
+    background-color: var(--bg_color);
+}
