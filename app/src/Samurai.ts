@@ -23,7 +23,7 @@ export class Samurai extends ex.Actor {
     onInitialize(engine: ex.Engine) {
 
         // run to right
-        const run = ex.Animation.fromSpriteSheet(samuraiRunSpriteSheet, [0, 1, 2, 3, 4, 5, 6, 7], 150);
+        const run = ex.Animation.fromSpriteSheet(samuraiRunSpriteSheet, [...new Array(samuraiRunSpriteSheet.columns).keys()]  , 150);
         run.scale = new ex.Vector(2, 2);
         this.graphics.add("runToRight", run)
 
