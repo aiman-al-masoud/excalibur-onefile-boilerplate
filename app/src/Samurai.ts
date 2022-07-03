@@ -57,27 +57,26 @@ export class Samurai extends ex.Actor {
         /**
          * Player input and set flags
          */
-        {
-            if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
-                this.vel.x = -150;
-                this.isFacingRight = false
-            }
 
-            if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
-                this.vel.x = 150;
-                this.isFacingRight = true
-            }
-
-            if(engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround ){
-                this.isJumping = true
-                this.vel.y -=500
-            }
-
-            if(engine.input.keyboard.isHeld(ex.Input.Keys.Space)){
-                this.isAttacking1 = true
-            }
-
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
+            this.vel.x = -150;
+            this.isFacingRight = false
         }
+
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
+            this.vel.x = 150;
+            this.isFacingRight = true
+        }
+
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround) {
+            this.isJumping = true
+            this.vel.y -= 500
+        }
+
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
+            this.isAttacking1 = true
+        }
+
 
         /**
          * Set flags
@@ -85,7 +84,6 @@ export class Samurai extends ex.Actor {
         if (Math.abs(this.vel.y) > 0) {
             this.isOnGround = false
         }
-
 
         /**
          * change animation 
@@ -109,7 +107,7 @@ export class Samurai extends ex.Actor {
             this.isJumping = false
         }
 
-        if(this.isAttacking1){
+        if (this.isAttacking1) {
             newGraphic = this.graphics.use("attack1")
         }
 
