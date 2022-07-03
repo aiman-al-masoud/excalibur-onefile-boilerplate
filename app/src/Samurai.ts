@@ -5,6 +5,7 @@ import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSp
 export class Samurai extends ex.Actor {
 
     public isOnGround = false;
+    public isJumping = false;
 
     constructor(x: number, y: number) {
         super({
@@ -37,24 +38,24 @@ export class Samurai extends ex.Actor {
 
         // jump 
         const jump = ex.Animation.fromSpriteSheet(samuraiJumpSpriteSheet, [...new Array(samuraiJumpSpriteSheet.columns).keys()], 150)
-        jump.scale = new ex.Vector(2,2)
+        jump.scale = new ex.Vector(2, 2)
         this.graphics.add("jump", jump)
 
         // fall 
         const fall = ex.Animation.fromSpriteSheet(samuraiFallSpriteSheet, [...new Array(samuraiFallSpriteSheet.columns).keys()], 150)
-        fall.scale = new ex.Vector(2,2)
+        fall.scale = new ex.Vector(2, 2)
         this.graphics.add("fall", fall)
 
 
 
-        this.on("postcollision", ev=>this.onPostCollision(ev))
+        this.on("postcollision", ev => this.onPostCollision(ev))
 
     }
 
 
-    onPostCollision(ev:PostCollisionEvent){
-        
-        if(ev.side===ex.Side.Bottom){
+    onPostCollision(ev: PostCollisionEvent) {
+
+        if (ev.side === ex.Side.Bottom) {
             this.isOnGround = true
         }
 
@@ -63,27 +64,41 @@ export class Samurai extends ex.Actor {
 
 
     onPreUpdate(engine: ex.Engine, delta: number) {
-        
+
         // Reset x velocity
         this.vel.x = 0;
 
-        // Player input
-        if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
-            this.vel.x = -150;
+        /**
+         * Player input
+         */
+        {
+            if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
+                this.vel.x = -150;
+            }
+
+            if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
+                this.vel.x = 150;
+            }
+
+            if(engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround ){
+                this.isJumping = true
+                this.vel.y -=500
+            }
+
         }
 
-        // Player input
-        if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
-            this.vel.x = 150;
-        }
 
-        if(Math.abs(this.vel.y)>0){
+
+        /**
+         * Set flags
+         */
+        if (Math.abs(this.vel.y) > 0) {
             this.isOnGround = false
         }
 
 
         /**
-         * change animation based on velocity
+         * change animation 
          */
 
         if (this.vel.x === 0) {
@@ -98,13 +113,13 @@ export class Samurai extends ex.Actor {
             this.graphics.use("runToRight")
         }
 
-        if(this.vel.y < 0){
+        if (this.vel.y < 0) {
             this.graphics.use("jump")
         }
 
-
-        if(this.vel.y > 0){
+        if (this.vel.y > 0) {
             this.graphics.use("fall")
+            this.isJumping = false
         }
 
 

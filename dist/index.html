@@ -30954,6 +30954,7 @@ class Samurai extends ex.Actor {
             color: ex.Color.Black
         });
         this.isOnGround = false;
+        this.isJumping = false;
     }
     onInitialize(engine) {
         // run to right
@@ -30986,19 +30987,29 @@ class Samurai extends ex.Actor {
     onPreUpdate(engine, delta) {
         // Reset x velocity
         this.vel.x = 0;
-        // Player input
-        if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
-            this.vel.x = -150;
+        /**
+         * Player input
+         */
+        {
+            if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
+                this.vel.x = -150;
+            }
+            if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
+                this.vel.x = 150;
+            }
+            if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround) {
+                this.isJumping = true;
+                this.vel.y -= 500;
+            }
         }
-        // Player input
-        if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
-            this.vel.x = 150;
-        }
+        /**
+         * Set flags
+         */
         if (Math.abs(this.vel.y) > 0) {
             this.isOnGround = false;
         }
         /**
-         * change animation based on velocity
+         * change animation
          */
         if (this.vel.x === 0) {
             this.graphics.use("idle");
@@ -31014,6 +31025,7 @@ class Samurai extends ex.Actor {
         }
         if (this.vel.y > 0) {
             this.graphics.use("fall");
+            this.isJumping = false;
         }
         console.log("isOnGround", this.isOnGround);
     }
