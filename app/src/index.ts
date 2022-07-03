@@ -8,7 +8,8 @@ const engine = new ex.Engine({
     width : 600,
     height :400,
     antialiasing: false,
-    suppressConsoleBootMessage:true
+    suppressConsoleBootMessage:true,
+    suppressPlayButton:true
 })
 
 // Gravity
