@@ -1,5 +1,5 @@
 import * as ex from 'excalibur';
-import { samuraiSpriteSheet, Resources } from './resources';
+import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet } from './resources';
 
 export class Samurai extends ex.Actor {
 
@@ -17,11 +17,20 @@ export class Samurai extends ex.Actor {
 
 
     onInitialize(engine: ex.Engine) {
-        const samurai = ex.Animation.fromSpriteSheet(samuraiSpriteSheet, [0, 1, 2,3,4,5,6,7], 150);
-        console.log(samurai)
-        samurai.scale = new ex.Vector(2, 2);
-        this.graphics.add("samurai", samurai)
-        // this.graphics.use("samurai")
+        
+        //run 
+        const run = ex.Animation.fromSpriteSheet(samuraiRunSpriteSheet, [0, 1, 2,3,4,5,6,7], 150);
+        run.scale = new ex.Vector(2, 2);
+        this.graphics.add("run", run)
+
+        // idle
+        const idle = ex.Animation.fromSpriteSheet(samuraiIdleSpriteSheet, [...new Array(samuraiIdleSpriteSheet.columns).keys()] , 150)
+        idle.scale = new ex.Vector(2,2)
+        this.graphics.add("idle", idle)
+
+
+
+
 
     }
 
@@ -40,7 +49,7 @@ export class Samurai extends ex.Actor {
         }
 
         if (this.vel.x === 0) {
-            this.graphics.use("samurai")
+            this.graphics.use("idle")
         }
     }
 
