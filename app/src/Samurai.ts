@@ -1,8 +1,10 @@
 import * as ex from 'excalibur';
+import { PostCollisionEvent } from 'excalibur';
 import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet } from './resources';
 
 export class Samurai extends ex.Actor {
 
+    public isOnGround = false;
 
     constructor(x: number, y: number) {
         super({
@@ -33,10 +35,23 @@ export class Samurai extends ex.Actor {
         idle.scale = new ex.Vector(2, 2)
         this.graphics.add("idle", idle)
 
+        this.on("postcollision", ev=>this.onPostCollision(ev))
 
     }
 
+
+    onPostCollision(ev:PostCollisionEvent){
+        
+        if(ev.side===ex.Side.Bottom){
+            this.isOnGround = true
+        }
+
+
+    }
+
+
     onPreUpdate(engine: ex.Engine, delta: number) {
+        
         // Reset x velocity
         this.vel.x = 0;
 
@@ -48,6 +63,10 @@ export class Samurai extends ex.Actor {
         // Player input
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
             this.vel.x = 150;
+        }
+
+        if(Math.abs(this.vel.y)>0){
+            this.isOnGround = false
         }
 
 
@@ -66,6 +85,9 @@ export class Samurai extends ex.Actor {
         if (this.vel.x > 0) {
             this.graphics.use("runToRight")
         }
+
+
+        console.log("isOnGround", this.isOnGround)
 
     }
 

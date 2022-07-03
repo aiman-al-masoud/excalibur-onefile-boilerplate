@@ -30953,6 +30953,7 @@ class Samurai extends ex.Actor {
             collider: ex.Shape.Box(32, 50, ex.Vector.Half, ex.vec(0, 3)),
             color: ex.Color.Black
         });
+        this.isOnGround = false;
     }
     onInitialize(engine) {
         // run to right
@@ -30967,6 +30968,15 @@ class Samurai extends ex.Actor {
         const idle = ex.Animation.fromSpriteSheet(resources_1.samuraiIdleSpriteSheet, [...new Array(resources_1.samuraiIdleSpriteSheet.columns).keys()], 150);
         idle.scale = new ex.Vector(2, 2);
         this.graphics.add("idle", idle);
+        this.on("postcollision", ev => this.onPostCollision(ev));
+    }
+    onPostCollision(ev) {
+        // console.log(ev)
+        console.log("side", ev.side);
+        if (ev.side === ex.Side.Bottom) {
+            console.log("ciao");
+            this.isOnGround = true;
+        }
     }
     onPreUpdate(engine, delta) {
         // Reset x velocity
@@ -30978,6 +30988,9 @@ class Samurai extends ex.Actor {
         // Player input
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
             this.vel.x = 150;
+        }
+        if (Math.abs(this.vel.y) > 0) {
+            this.isOnGround = false;
         }
         /**
          * change animation based on velocity
@@ -30991,6 +31004,7 @@ class Samurai extends ex.Actor {
         if (this.vel.x > 0) {
             this.graphics.use("runToRight");
         }
+        console.log("isOnGround", this.isOnGround);
     }
 }
 exports.Samurai = Samurai;
