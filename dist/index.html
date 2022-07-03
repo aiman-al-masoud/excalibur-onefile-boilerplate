@@ -30959,37 +30959,15 @@ class Samurai extends ex.Actor {
         this.isFacingRight = true; // sprite image in file has to satisfy this
     }
     onInitialize(engine) {
-        // run to right
-        const run = ex.Animation.fromSpriteSheet(resources_1.samuraiRunSpriteSheet, [...new Array(resources_1.samuraiRunSpriteSheet.columns).keys()], 150);
-        run.scale = new ex.Vector(2, 2);
-        this.graphics.add("runToRight", run);
-        //new 
-        // const runToRigth = spriteSheetToAnimation(samuraiRunSpriteSheet, 150)
-        // const runToLeft = runToRigth.clone()
-        // runToLeft.flipHorizontal = true
-        // run to left
-        const runToLeft = run.clone();
-        runToLeft.flipHorizontal = true;
-        this.graphics.add("runToLeft", runToLeft);
-        // idle
-        const idle = ex.Animation.fromSpriteSheet(resources_1.samuraiIdleSpriteSheet, [...new Array(resources_1.samuraiIdleSpriteSheet.columns).keys()], 150);
-        idle.scale = new ex.Vector(2, 2);
+        const run = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiRunSpriteSheet, 150);
+        const idle = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiIdleSpriteSheet, 150);
+        const jump = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiJumpSpriteSheet, 150);
+        const fall = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiFallSpriteSheet, 150);
+        const attack1 = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiAttack1SpriteSheet, 50);
+        this.graphics.add("run", run);
         this.graphics.add("idle", idle);
-        //new
-        // const idleToRight = spriteSheetToAnimation(samuraiIdleSpriteSheet, 150)
-        // const idleToLeft = idleToRight.clone()
-        // idleToLeft.flipHorizontal = true
-        // jump 
-        const jump = ex.Animation.fromSpriteSheet(resources_1.samuraiJumpSpriteSheet, [...new Array(resources_1.samuraiJumpSpriteSheet.columns).keys()], 150);
-        jump.scale = new ex.Vector(2, 2);
         this.graphics.add("jump", jump);
-        // fall 
-        const fall = ex.Animation.fromSpriteSheet(resources_1.samuraiFallSpriteSheet, [...new Array(resources_1.samuraiFallSpriteSheet.columns).keys()], 150);
-        fall.scale = new ex.Vector(2, 2);
         this.graphics.add("fall", fall);
-        // attack 1
-        const attack1 = ex.Animation.fromSpriteSheet(resources_1.samuraiAttack1SpriteSheet, [...new Array(resources_1.samuraiAttack1SpriteSheet.columns).keys()], 50);
-        attack1.scale = new ex.Vector(2, 2);
         this.graphics.add("attack1", attack1);
         this.on("postcollision", ev => this.onPostCollision(ev));
     }
@@ -31036,11 +31014,8 @@ class Samurai extends ex.Actor {
             newGraphic = this.graphics.use("idle");
         }
         if (Math.abs(this.vel.x) > 0) {
-            newGraphic = this.graphics.use("runToRight");
+            newGraphic = this.graphics.use("run");
         }
-        // if (this.vel.x < 0) {
-        //     newGraphic = this.graphics.use("runToLeft")
-        // }
         if (this.vel.y < 0) {
             newGraphic = this.graphics.use("jump");
         }
@@ -31188,7 +31163,7 @@ const imgToSpriteSheet = (imgSrc, cols, rows, spriteWidth, spriteHeight) => {
     });
 };
 const spriteSheetToAnimation = (spriteSheet, durationPerFrameMs, strategy, scale) => {
-    let anim = ex.Animation.fromSpriteSheet(spriteSheet, [...new Array(spriteSheet.columns)], durationPerFrameMs, strategy);
+    let anim = ex.Animation.fromSpriteSheet(spriteSheet, [...new Array(spriteSheet.columns).keys()], durationPerFrameMs, strategy);
     anim.scale = scale !== null && scale !== void 0 ? scale : new excalibur_1.Vector(2, 2);
     return anim;
 };

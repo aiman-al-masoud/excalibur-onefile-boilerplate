@@ -47,7 +47,7 @@ const imgToSpriteSheet = (imgSrc: ImageSource, cols: number, rows: number, sprit
 }
 
 const spriteSheetToAnimation = (spriteSheet: ex.SpriteSheet, durationPerFrameMs: number, strategy?: ex.AnimationStrategy | undefined, scale?:ex.Vector | undefined) => {
-    let anim = ex.Animation.fromSpriteSheet(spriteSheet, [... new Array(spriteSheet.columns)], durationPerFrameMs, strategy)
+    let anim = ex.Animation.fromSpriteSheet(spriteSheet, [... new Array(spriteSheet.columns).keys()]  , durationPerFrameMs, strategy)
     anim.scale = scale??new Vector(2,2)
     return anim
 }
