@@ -25,8 +25,8 @@ const samuraiSpriteSheet = ex.SpriteSheet.fromImageSource({
     grid: { 
         columns: 8,
         rows: 1, 
-        spriteWidth: 32,
-        spriteHeight: 32
+        spriteWidth: 200,
+        spriteHeight: 200
     }
 });
 
