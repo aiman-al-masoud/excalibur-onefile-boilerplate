@@ -1,5 +1,5 @@
 import * as ex from 'excalibur';
-import { ImageSource } from 'excalibur';
+import { ImageSource, Vector } from 'excalibur';
 
 // import files
 const blockFile = require("../res/block.png")
@@ -20,8 +20,8 @@ const Resources = {
     samuraiJump: new ex.ImageSource(samuraiJumpFile.default),
     samuraiAttack1: new ex.ImageSource(samuraiAttack1File.default),
     samuraiFall: new ex.ImageSource(samuraiFallFile.default),
-    samuraiDie : new ex.ImageSource(samuraiDieFile.default),
-    samuraiTakeHit : new ex.ImageSource(samuraiTakeHitFile.default)
+    samuraiDie: new ex.ImageSource(samuraiDieFile.default),
+    samuraiTakeHit: new ex.ImageSource(samuraiTakeHitFile.default)
 }
 
 
@@ -34,7 +34,7 @@ const Resources = {
  * @param spriteHeight 
  * @returns 
  */
-const imgToSpriteSheet = (imgSrc : ImageSource, cols:number, rows:number, spriteWidth:number, spriteHeight:number)=>{
+const imgToSpriteSheet = (imgSrc: ImageSource, cols: number, rows: number, spriteWidth: number, spriteHeight: number) => {
     return ex.SpriteSheet.fromImageSource({
         image: imgSrc,
         grid: {
@@ -45,6 +45,16 @@ const imgToSpriteSheet = (imgSrc : ImageSource, cols:number, rows:number, sprite
         }
     });
 }
+
+const spriteSheetToAnimation = (spriteSheet: ex.SpriteSheet, durationPerFrameMs: number, strategy?: ex.AnimationStrategy | undefined, scale?:ex.Vector | undefined) => {
+    let anim = ex.Animation.fromSpriteSheet(spriteSheet, [... new Array(spriteSheet.columns)], durationPerFrameMs, strategy)
+    anim.scale = scale??new Vector(2,2)
+    return anim
+}
+
+
+
+
 
 
 // create sprites/sprite-sheets from images
@@ -67,6 +77,6 @@ for (const res in Resources) {
     loader.addResource((Resources as any)[res]);
 }
 
-export { Resources, loader, samuraiRunSpriteSheet, blockSprite, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiAttack1SpriteSheet, samuraiFallSpriteSheet, samuraiDieSpriteSheet, samuraiTakeHitSpriteSheet }
+export { Resources, loader, samuraiRunSpriteSheet, blockSprite, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiAttack1SpriteSheet, samuraiFallSpriteSheet, samuraiDieSpriteSheet, samuraiTakeHitSpriteSheet, spriteSheetToAnimation }
 
 

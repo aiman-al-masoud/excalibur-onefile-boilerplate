@@ -30956,12 +30956,17 @@ class Samurai extends ex.Actor {
         this.isOnGround = false;
         this.isJumping = false;
         this.isAttacking1 = false;
+        this.isFacingRight = true; // sprite image in file has to satisfy this
     }
     onInitialize(engine) {
         // run to right
         const run = ex.Animation.fromSpriteSheet(resources_1.samuraiRunSpriteSheet, [...new Array(resources_1.samuraiRunSpriteSheet.columns).keys()], 150);
         run.scale = new ex.Vector(2, 2);
         this.graphics.add("runToRight", run);
+        //new 
+        // const runToRigth = spriteSheetToAnimation(samuraiRunSpriteSheet, 150)
+        // const runToLeft = runToRigth.clone()
+        // runToLeft.flipHorizontal = true
         // run to left
         const runToLeft = run.clone();
         runToLeft.flipHorizontal = true;
@@ -30970,6 +30975,10 @@ class Samurai extends ex.Actor {
         const idle = ex.Animation.fromSpriteSheet(resources_1.samuraiIdleSpriteSheet, [...new Array(resources_1.samuraiIdleSpriteSheet.columns).keys()], 150);
         idle.scale = new ex.Vector(2, 2);
         this.graphics.add("idle", idle);
+        //new
+        // const idleToRight = spriteSheetToAnimation(samuraiIdleSpriteSheet, 150)
+        // const idleToLeft = idleToRight.clone()
+        // idleToLeft.flipHorizontal = true
         // jump 
         const jump = ex.Animation.fromSpriteSheet(resources_1.samuraiJumpSpriteSheet, [...new Array(resources_1.samuraiJumpSpriteSheet.columns).keys()], 150);
         jump.scale = new ex.Vector(2, 2);
@@ -30999,9 +31008,11 @@ class Samurai extends ex.Actor {
         {
             if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
                 this.vel.x = -150;
+                this.isFacingRight = false;
             }
             if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
                 this.vel.x = 150;
+                this.isFacingRight = true;
             }
             if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround) {
                 this.isJumping = true;
@@ -31020,26 +31031,27 @@ class Samurai extends ex.Actor {
         /**
          * change animation
          */
+        let newGraphic = this.graphics.use("idle");
         if (this.vel.x === 0) {
-            this.graphics.use("idle");
+            newGraphic = this.graphics.use("idle");
         }
-        if (this.vel.x < 0) {
-            this.graphics.use("runToLeft");
+        if (Math.abs(this.vel.x) > 0) {
+            newGraphic = this.graphics.use("runToRight");
         }
-        if (this.vel.x > 0) {
-            this.graphics.use("runToRight");
-        }
+        // if (this.vel.x < 0) {
+        //     newGraphic = this.graphics.use("runToLeft")
+        // }
         if (this.vel.y < 0) {
-            this.graphics.use("jump");
+            newGraphic = this.graphics.use("jump");
         }
         if (this.vel.y > 0) {
-            this.graphics.use("fall");
+            newGraphic = this.graphics.use("fall");
             this.isJumping = false;
         }
         if (this.isAttacking1) {
-            this.graphics.use("attack1");
+            newGraphic = this.graphics.use("attack1");
         }
-        console.log("isOnGround", this.isOnGround);
+        newGraphic.flipHorizontal = !this.isFacingRight;
     }
 }
 exports.Samurai = Samurai;
@@ -31131,8 +31143,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.samuraiTakeHitSpriteSheet = exports.samuraiDieSpriteSheet = exports.samuraiFallSpriteSheet = exports.samuraiAttack1SpriteSheet = exports.samuraiJumpSpriteSheet = exports.samuraiIdleSpriteSheet = exports.blockSprite = exports.samuraiRunSpriteSheet = exports.loader = exports.Resources = void 0;
+exports.spriteSheetToAnimation = exports.samuraiTakeHitSpriteSheet = exports.samuraiDieSpriteSheet = exports.samuraiFallSpriteSheet = exports.samuraiAttack1SpriteSheet = exports.samuraiJumpSpriteSheet = exports.samuraiIdleSpriteSheet = exports.blockSprite = exports.samuraiRunSpriteSheet = exports.loader = exports.Resources = void 0;
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
+const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
 // import files
 const blockFile = __webpack_require__(/*! ../res/block.png */ "./app/res/block.png");
 const samuraiRunFile = __webpack_require__(/*! ../res/samurai/run.png */ "./app/res/samurai/run.png");
@@ -31174,6 +31187,12 @@ const imgToSpriteSheet = (imgSrc, cols, rows, spriteWidth, spriteHeight) => {
         }
     });
 };
+const spriteSheetToAnimation = (spriteSheet, durationPerFrameMs, strategy, scale) => {
+    let anim = ex.Animation.fromSpriteSheet(spriteSheet, [...new Array(spriteSheet.columns)], durationPerFrameMs, strategy);
+    anim.scale = scale !== null && scale !== void 0 ? scale : new excalibur_1.Vector(2, 2);
+    return anim;
+};
+exports.spriteSheetToAnimation = spriteSheetToAnimation;
 // create sprites/sprite-sheets from images
 const blockSprite = Resources.block.toSprite();
 exports.blockSprite = blockSprite;
