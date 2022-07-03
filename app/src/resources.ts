@@ -53,8 +53,6 @@ const samuraiRunSpriteSheet = imgToSpriteSheet(Resources.samuraiRun, 8, 1, 200, 
 const samuraiIdleSpriteSheet = imgToSpriteSheet(Resources.samuraiIdle, 8, 1, 200, 200)
 const samuraiJumpSpriteSheet = imgToSpriteSheet(Resources.samuraiJump, 2, 1, 200, 200)
 const samuraiFallSpriteSheet = imgToSpriteSheet(Resources.samuraiFall, 2, 1, 200, 200)
-
-
 const samuraiAttack1SpriteSheet = imgToSpriteSheet(Resources.samuraiAttack1, 6, 1, 200, 200)
 const samuraiDieSpriteSheet = imgToSpriteSheet(Resources.samuraiDie, 6, 1, 200, 200)
 const samuraiTakeHitSpriteSheet = imgToSpriteSheet(Resources.samuraiTakeHit, 4, 1, 200, 200)
