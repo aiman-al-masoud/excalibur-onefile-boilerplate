@@ -30955,6 +30955,7 @@ class Samurai extends ex.Actor {
         });
         this.isOnGround = false;
         this.isJumping = false;
+        this.isAttacking1 = false;
     }
     onInitialize(engine) {
         // run to right
@@ -30977,6 +30978,10 @@ class Samurai extends ex.Actor {
         const fall = ex.Animation.fromSpriteSheet(resources_1.samuraiFallSpriteSheet, [...new Array(resources_1.samuraiFallSpriteSheet.columns).keys()], 150);
         fall.scale = new ex.Vector(2, 2);
         this.graphics.add("fall", fall);
+        // attack 1
+        const attack1 = ex.Animation.fromSpriteSheet(resources_1.samuraiAttack1SpriteSheet, [...new Array(resources_1.samuraiAttack1SpriteSheet.columns).keys()], 150);
+        attack1.scale = new ex.Vector(2, 2);
+        this.graphics.add("attack1", attack1);
         this.on("postcollision", ev => this.onPostCollision(ev));
     }
     onPostCollision(ev) {
@@ -30987,8 +30992,9 @@ class Samurai extends ex.Actor {
     onPreUpdate(engine, delta) {
         // Reset x velocity
         this.vel.x = 0;
+        this.isAttacking1 = false;
         /**
-         * Player input
+         * Player input and set flags
          */
         {
             if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
@@ -31000,6 +31006,9 @@ class Samurai extends ex.Actor {
             if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround) {
                 this.isJumping = true;
                 this.vel.y -= 500;
+            }
+            if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
+                this.isAttacking1 = true;
             }
         }
         /**
@@ -31026,6 +31035,9 @@ class Samurai extends ex.Actor {
         if (this.vel.y > 0) {
             this.graphics.use("fall");
             this.isJumping = false;
+        }
+        if (this.isAttacking1) {
+            this.graphics.use("attack1");
         }
         console.log("isOnGround", this.isOnGround);
     }

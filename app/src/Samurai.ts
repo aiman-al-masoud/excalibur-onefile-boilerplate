@@ -1,11 +1,12 @@
 import * as ex from 'excalibur';
 import { PostCollisionEvent } from 'excalibur';
-import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet } from './resources';
+import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet } from './resources';
 
 export class Samurai extends ex.Actor {
 
     public isOnGround = false;
     public isJumping = false;
+    public isAttacking1 = false
 
     constructor(x: number, y: number) {
         super({
@@ -46,6 +47,11 @@ export class Samurai extends ex.Actor {
         fall.scale = new ex.Vector(2, 2)
         this.graphics.add("fall", fall)
 
+        // attack 1
+        const attack1 = ex.Animation.fromSpriteSheet(samuraiAttack1SpriteSheet, [...new Array(samuraiAttack1SpriteSheet.columns).keys()], 150)
+        attack1.scale = new ex.Vector(2, 2)
+        this.graphics.add("attack1", attack1)
+
 
 
         this.on("postcollision", ev => this.onPostCollision(ev))
@@ -67,9 +73,10 @@ export class Samurai extends ex.Actor {
 
         // Reset x velocity
         this.vel.x = 0;
+        this.isAttacking1 = false;
 
         /**
-         * Player input
+         * Player input and set flags
          */
         {
             if (engine.input.keyboard.isHeld(ex.Input.Keys.Left)) {
@@ -85,9 +92,11 @@ export class Samurai extends ex.Actor {
                 this.vel.y -=500
             }
 
+            if(engine.input.keyboard.isHeld(ex.Input.Keys.Space)){
+                this.isAttacking1 = true
+            }
+
         }
-
-
 
         /**
          * Set flags
@@ -120,6 +129,10 @@ export class Samurai extends ex.Actor {
         if (this.vel.y > 0) {
             this.graphics.use("fall")
             this.isJumping = false
+        }
+
+        if(this.isAttacking1){
+            this.graphics.use("attack1")
         }
 
 
