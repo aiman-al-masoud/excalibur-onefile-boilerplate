@@ -30968,13 +30968,18 @@ class Samurai extends ex.Actor {
         const idle = ex.Animation.fromSpriteSheet(resources_1.samuraiIdleSpriteSheet, [...new Array(resources_1.samuraiIdleSpriteSheet.columns).keys()], 150);
         idle.scale = new ex.Vector(2, 2);
         this.graphics.add("idle", idle);
+        // jump 
+        const jump = ex.Animation.fromSpriteSheet(resources_1.samuraiJumpSpriteSheet, [...new Array(resources_1.samuraiJumpSpriteSheet.columns).keys()], 150);
+        jump.scale = new ex.Vector(2, 2);
+        this.graphics.add("jump", jump);
+        // fall 
+        const fall = ex.Animation.fromSpriteSheet(resources_1.samuraiFallSpriteSheet, [...new Array(resources_1.samuraiFallSpriteSheet.columns).keys()], 150);
+        fall.scale = new ex.Vector(2, 2);
+        this.graphics.add("fall", fall);
         this.on("postcollision", ev => this.onPostCollision(ev));
     }
     onPostCollision(ev) {
-        // console.log(ev)
-        console.log("side", ev.side);
         if (ev.side === ex.Side.Bottom) {
-            console.log("ciao");
             this.isOnGround = true;
         }
     }
@@ -31003,6 +31008,12 @@ class Samurai extends ex.Actor {
         }
         if (this.vel.x > 0) {
             this.graphics.use("runToRight");
+        }
+        if (this.vel.y < 0) {
+            this.graphics.use("jump");
+        }
+        if (this.vel.y > 0) {
+            this.graphics.use("fall");
         }
         console.log("isOnGround", this.isOnGround);
     }
@@ -31146,15 +31157,15 @@ const samuraiRunSpriteSheet = imgToSpriteSheet(Resources.samuraiRun, 8, 1, 200, 
 exports.samuraiRunSpriteSheet = samuraiRunSpriteSheet;
 const samuraiIdleSpriteSheet = imgToSpriteSheet(Resources.samuraiIdle, 8, 1, 200, 200);
 exports.samuraiIdleSpriteSheet = samuraiIdleSpriteSheet;
-const samuraiJumpSpriteSheet = imgToSpriteSheet(Resources.samuraiJump, 8, 1, 200, 200);
+const samuraiJumpSpriteSheet = imgToSpriteSheet(Resources.samuraiJump, 2, 1, 200, 200);
 exports.samuraiJumpSpriteSheet = samuraiJumpSpriteSheet;
-const samuraiAttack1SpriteSheet = imgToSpriteSheet(Resources.samuraiAttack1, 8, 1, 200, 200);
-exports.samuraiAttack1SpriteSheet = samuraiAttack1SpriteSheet;
-const samuraiFallSpriteSheet = imgToSpriteSheet(Resources.samuraiFall, 8, 1, 200, 200);
+const samuraiFallSpriteSheet = imgToSpriteSheet(Resources.samuraiFall, 2, 1, 200, 200);
 exports.samuraiFallSpriteSheet = samuraiFallSpriteSheet;
-const samuraiDieSpriteSheet = imgToSpriteSheet(Resources.samuraiDie, 8, 1, 200, 200);
+const samuraiAttack1SpriteSheet = imgToSpriteSheet(Resources.samuraiAttack1, 6, 1, 200, 200);
+exports.samuraiAttack1SpriteSheet = samuraiAttack1SpriteSheet;
+const samuraiDieSpriteSheet = imgToSpriteSheet(Resources.samuraiDie, 6, 1, 200, 200);
 exports.samuraiDieSpriteSheet = samuraiDieSpriteSheet;
-const samuraiTakeHitSpriteSheet = imgToSpriteSheet(Resources.samuraiTakeHit, 8, 1, 200, 200);
+const samuraiTakeHitSpriteSheet = imgToSpriteSheet(Resources.samuraiTakeHit, 4, 1, 200, 200);
 exports.samuraiTakeHitSpriteSheet = samuraiTakeHitSpriteSheet;
 // create loader
 const loader = new ex.Loader();

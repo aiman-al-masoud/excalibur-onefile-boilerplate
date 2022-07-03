@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { PostCollisionEvent } from 'excalibur';
-import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet } from './resources';
+import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet } from './resources';
 
 export class Samurai extends ex.Actor {
 
@@ -34,6 +34,18 @@ export class Samurai extends ex.Actor {
         const idle = ex.Animation.fromSpriteSheet(samuraiIdleSpriteSheet, [...new Array(samuraiIdleSpriteSheet.columns).keys()], 150)
         idle.scale = new ex.Vector(2, 2)
         this.graphics.add("idle", idle)
+
+        // jump 
+        const jump = ex.Animation.fromSpriteSheet(samuraiJumpSpriteSheet, [...new Array(samuraiJumpSpriteSheet.columns).keys()], 150)
+        jump.scale = new ex.Vector(2,2)
+        this.graphics.add("jump", jump)
+
+        // fall 
+        const fall = ex.Animation.fromSpriteSheet(samuraiFallSpriteSheet, [...new Array(samuraiFallSpriteSheet.columns).keys()], 150)
+        fall.scale = new ex.Vector(2,2)
+        this.graphics.add("fall", fall)
+
+
 
         this.on("postcollision", ev=>this.onPostCollision(ev))
 
@@ -84,6 +96,15 @@ export class Samurai extends ex.Actor {
 
         if (this.vel.x > 0) {
             this.graphics.use("runToRight")
+        }
+
+        if(this.vel.y < 0){
+            this.graphics.use("jump")
+        }
+
+
+        if(this.vel.y > 0){
+            this.graphics.use("fall")
         }
 
 
