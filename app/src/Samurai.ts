@@ -48,7 +48,7 @@ export class Samurai extends ex.Actor {
         this.graphics.add("fall", fall)
 
         // attack 1
-        const attack1 = ex.Animation.fromSpriteSheet(samuraiAttack1SpriteSheet, [...new Array(samuraiAttack1SpriteSheet.columns).keys()], 150)
+        const attack1 = ex.Animation.fromSpriteSheet(samuraiAttack1SpriteSheet, [...new Array(samuraiAttack1SpriteSheet.columns).keys()], 50)
         attack1.scale = new ex.Vector(2, 2)
         this.graphics.add("attack1", attack1)
 

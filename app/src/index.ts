@@ -4,7 +4,7 @@ import Level1 from './Level1'
 import { loader } from './resources'
 
 const engine = new ex.Engine({
-    backgroundColor: ex.Color.Yellow,
+    backgroundColor: ex.Color.fromRGB(0,0, 100, 0.5),
     width : 600,
     height :400,
     antialiasing: false,

@@ -30979,7 +30979,7 @@ class Samurai extends ex.Actor {
         fall.scale = new ex.Vector(2, 2);
         this.graphics.add("fall", fall);
         // attack 1
-        const attack1 = ex.Animation.fromSpriteSheet(resources_1.samuraiAttack1SpriteSheet, [...new Array(resources_1.samuraiAttack1SpriteSheet.columns).keys()], 150);
+        const attack1 = ex.Animation.fromSpriteSheet(resources_1.samuraiAttack1SpriteSheet, [...new Array(resources_1.samuraiAttack1SpriteSheet.columns).keys()], 50);
         attack1.scale = new ex.Vector(2, 2);
         this.graphics.add("attack1", attack1);
         this.on("postcollision", ev => this.onPostCollision(ev));
@@ -31082,7 +31082,7 @@ const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/exc
 const Level1_1 = __importDefault(__webpack_require__(/*! ./Level1 */ "./app/src/Level1.ts"));
 const resources_1 = __webpack_require__(/*! ./resources */ "./app/src/resources.ts");
 const engine = new ex.Engine({
-    backgroundColor: ex.Color.Yellow,
+    backgroundColor: ex.Color.fromRGB(0, 0, 100, 0.5),
     width: 600,
     height: 400,
     antialiasing: false,
