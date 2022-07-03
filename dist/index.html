@@ -30955,10 +30955,14 @@ class Samurai extends ex.Actor {
         });
     }
     onInitialize(engine) {
-        //run 
+        // run to right
         const run = ex.Animation.fromSpriteSheet(resources_1.samuraiRunSpriteSheet, [0, 1, 2, 3, 4, 5, 6, 7], 150);
         run.scale = new ex.Vector(2, 2);
-        this.graphics.add("run", run);
+        this.graphics.add("runToRight", run);
+        // run to left
+        const runToLeft = run.clone();
+        runToLeft.flipHorizontal = true;
+        this.graphics.add("runToLeft", runToLeft);
         // idle
         const idle = ex.Animation.fromSpriteSheet(resources_1.samuraiIdleSpriteSheet, [...new Array(resources_1.samuraiIdleSpriteSheet.columns).keys()], 150);
         idle.scale = new ex.Vector(2, 2);
@@ -30975,8 +30979,17 @@ class Samurai extends ex.Actor {
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Right)) {
             this.vel.x = 150;
         }
+        /**
+         * change animation based on velocity
+         */
         if (this.vel.x === 0) {
             this.graphics.use("idle");
+        }
+        if (this.vel.x < 0) {
+            this.graphics.use("runToLeft");
+        }
+        if (this.vel.x > 0) {
+            this.graphics.use("runToRight");
         }
     }
 }
