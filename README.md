@@ -4,7 +4,7 @@
 A simple 'boilerplate' to play around with <a href="https://excaliburjs.com/">this awesome library </a>. Webpack is set up to package your game into a single HTML file with inline resources.
 
 
-## Set-up and usage (On Linux.)
+## Set-up and usage on everyone's favorite OS (Linux...)
 
 ### 1. Clone this repository
 
