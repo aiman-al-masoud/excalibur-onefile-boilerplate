@@ -14,7 +14,7 @@ export interface BombArgs {
 export default class Bomb extends Actor {
 
     impactVel = 0;
-    collisionsBeforeExplode = 15;
+    collisionsBeforeExplode = 10;
     collisionsCounter = 0;
 
     constructor(args: BombArgs) {
