@@ -97,7 +97,7 @@ yarn run dev-build
 
 ### 6. Enjoy!
 
-
+Open up the file `/dist/index.html` on a modern web browser and start playing!
 
 ## Attributions:
 
