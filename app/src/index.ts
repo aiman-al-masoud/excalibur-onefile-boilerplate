@@ -24,9 +24,9 @@ engine.start(loader).then(e=>{
     console.log("game started!")
 });
 
+
 // For test hook
-// (window as any).engine = engine;
-// (window as any).level = level;
+(window as any).engine = engine;
 
 
 
