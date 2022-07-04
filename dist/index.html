@@ -30812,24 +30812,32 @@ var __webpack_exports__webgl = __webpack_exports__.yOA;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
 class Bomb extends excalibur_1.Actor {
-    constructor(x, y) {
+    constructor(args) {
         super({
             name: "Bomb",
-            pos: new excalibur_1.Vector(x, y),
+            pos: new excalibur_1.Vector(args.x, args.y),
+            vel: new excalibur_1.Vector(args.xVel, args.yVel),
             collisionType: excalibur_1.CollisionType.Active,
             collisionGroup: excalibur_1.CollisionGroupManager.groupByName("Bomb"),
-            // collider : Shape.Box(10,10, Vector.Half, vec(0, 3)),
-            // collider : Shape.Circle(10,vec(0, 3) ),
             color: excalibur_1.Color.Black,
-            radius: 10
+            radius: 10,
         });
+        this.impactVel = 0;
     }
     onInitialize(engine) {
-        // const fall = spriteSheetToAnimation(samuraiFallSpriteSheet, 150)
-        // this.graphics.add("g", fall)
-        // this.graphics.use("g")
+        this.on("postcollision", e => this.onPostCollision(e));
+        this.on("precollision", e => this.onPreCollision(e));
+    }
+    onPreCollision(e) {
+        // this.vel.y = -100
+        this.impactVel = this.vel.y;
+    }
+    onPostCollision(e) {
+        this.vel.y = -0.7 * this.impactVel;
     }
     onPostUpdate(engine, delta) {
+        // console.log(this.vel)
+        // this.vel = new Vector(10, -100)
     }
 }
 exports["default"] = Bomb;
@@ -30944,7 +30952,10 @@ class Level1 extends excalibur_1.Scene {
         engine.add(a);
         const floor = new Floor_1.Floor(0, 300, 15, 1);
         engine.add(floor);
-        engine.add(new Bomb_1.default(engine.halfDrawWidth + 100, engine.halfDrawHeight - 100));
+        engine.add(new Bomb_1.default({ x: engine.halfDrawWidth + 50,
+            y: engine.halfDrawHeight - 100,
+            xVel: 0,
+            yVel: -500 }));
         this.camera.clearAllStrategies();
         this.camera.strategy.elasticToActor(a, 0.05, 0.1);
     }
@@ -30983,6 +30994,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Samurai = void 0;
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
+const Floor_1 = __webpack_require__(/*! ./Floor */ "./app/src/Floor.ts");
 const resources_1 = __webpack_require__(/*! ./resources */ "./app/src/resources.ts");
 class Samurai extends ex.Actor {
     constructor(x, y) {
@@ -30991,7 +31003,7 @@ class Samurai extends ex.Actor {
             pos: new ex.Vector(x, y),
             collisionType: ex.CollisionType.Active,
             collisionGroup: ex.CollisionGroupManager.groupByName("Samurai"),
-            collider: ex.Shape.Box(32, 50, ex.Vector.Half, ex.vec(0, 3)),
+            collider: ex.Shape.Box(30, 60, ex.Vector.Half, ex.vec(0, 3)),
             color: ex.Color.Black
         });
         this.isOnGround = false;
@@ -31015,6 +31027,12 @@ class Samurai extends ex.Actor {
     onPostCollision(ev) {
         if (ev.side === ex.Side.Bottom) {
             this.isOnGround = true;
+        }
+        //TODO: check collision strategy==Fixed instead of instanceof
+        // other should move when hit 
+        if (this.isAttacking1 && !(ev.other instanceof Floor_1.Floor)) {
+            ev.other.vel.x = (this.isFacingRight ? 1 : -1) * 100;
+            ev.other.vel.y = 400;
         }
     }
     onPreUpdate(engine, delta) {

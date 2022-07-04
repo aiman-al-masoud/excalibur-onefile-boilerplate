@@ -1,5 +1,6 @@
 import * as ex from 'excalibur';
 import { Graphic, PostCollisionEvent } from 'excalibur';
+import { Floor } from './Floor';
 import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet, spriteSheetToAnimation } from './resources';
 
 export class Samurai extends ex.Actor {
@@ -15,9 +16,11 @@ export class Samurai extends ex.Actor {
             pos: new ex.Vector(x, y),
             collisionType: ex.CollisionType.Active,
             collisionGroup: ex.CollisionGroupManager.groupByName("Samurai"),
-            collider: ex.Shape.Box(32, 50, ex.Vector.Half, ex.vec(0, 3)),
+            collider: ex.Shape.Box(30, 60, ex.Vector.Half, ex.vec(0, 3)),
             color: ex.Color.Black
         });
+
+        
     }
 
 
@@ -43,6 +46,14 @@ export class Samurai extends ex.Actor {
 
         if (ev.side === ex.Side.Bottom) {
             this.isOnGround = true
+        }
+
+
+        //TODO: check collision strategy==Fixed instead of instanceof
+        // other should move when hit 
+        if(this.isAttacking1  && ! (ev.other instanceof Floor) ){
+            ev.other.vel.x = ( this.isFacingRight?1:-1 ) * 100
+            ev.other.vel.y =  400
         }
 
     }

@@ -27,8 +27,12 @@ export default class Level1 extends Scene{
         engine.add(floor)
 
 
-        engine.add(new Bomb(engine.halfDrawWidth + 100, engine.halfDrawHeight - 100))
+        engine.add(new Bomb({x: engine.halfDrawWidth + 50, 
+            y: engine.halfDrawHeight - 100,
+            xVel: 0, 
+            yVel :  -500} ))
 
+        
       
         this.camera.clearAllStrategies();
         this.camera.strategy.elasticToActor(a, 0.05, 0.1);
