@@ -1,24 +1,7 @@
-# React Boilerplate
-
-<div style="display: flex; flex-direction: row;">
-<img  src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" />
-<img  src="https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" />
-<img  src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" />
-<img  src="https://img.shields.io/badge/webpack-%238DD6F9.svg?style=for-the-badge&logo=webpack&logoColor=black" />
-<img  src="https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white" />
-<img  src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" />
-</div>
+# Excalibur Boilerplate
 
 
-
-
-
-
-
-A boilerplate for React projects in Typescript, with inline css and multimedia resource inclusion (in the form of base64 strings), that builds and packages everything using Webpack into a single html file.
-
-Ideal for SPAs (Single Page Applications), or to practice on TypeScript. 
-
+A simple 'boilerplate' to play around with <a href="https://excaliburjs.com/">this awesome library </a>. Webpack is set up to package your game into a single HTML file with inline resources.
 
 
 ## Set-up and usage (On Linux.)
@@ -102,7 +85,7 @@ yarn install
 ```
 yarn run build
 ```
-... this will generate the (production-ready) file `/dist/index.html`, which you can open from any browser.
+... this will generate the 'production-ready' file `/dist/index.html`, which you can open from any browser.
 
 or:
 
@@ -118,31 +101,5 @@ yarn run dev-build
 
 ## Attributions:
 
-### The sources for the multimedia content used for the examples are listed in:
 
 <a href="./app/res/attribs.md">./app/res/attribs.md</a>
-
-### This api is used as an example of pinging a server:
-
-<a href="http://www.7timer.info/bin/api.pl?lon=113.17&lat=23.09&product=astro&output=xml">http://www.7timer.info/bin/api.pl?lon=113.17&lat=23.09&product=astro&output=xml</a>
-
-
-## Useful Resources:
-
-#### Official Documentation:
-
-<a href="https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example">https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/basic_type_example</a>
-
-
-#### Basic Data Types:
-
-<a href="https://www.typescriptlang.org/docs/handbook/basic-types.html#table-of-contents">https://www.typescriptlang.org/docs/handbook/basic-types.html#table-of-contents</a>
-
-#### Types vs Interfaces:
-
-<a href="https://blog.logrocket.com/types-vs-interfaces-in-typescript/">https://blog.logrocket.com/types-vs-interfaces-in-typescript/</a>
-
-#### Interface Functions
-
-<a href="https://medium.com/@jeffbutsch/typescript-interface-functions-c691a108e3f1">https://medium.com/@jeffbutsch/typescript-interface-functions-c691a108e3f1</a>
-
