@@ -52,8 +52,8 @@ export class Samurai extends ex.Actor {
         //TODO: check collision strategy==Fixed instead of instanceof
         // other should move when hit 
         if(this.isAttacking1  && ! (ev.other instanceof Floor) ){
-            ev.other.vel.x = ( this.isFacingRight?1:-1 ) * 100
-            ev.other.vel.y =  400
+            ev.other.vel.x += ( this.isFacingRight?1:-1 ) * 500
+            ev.other.vel.y +=  800
         }
 
     }
