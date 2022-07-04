@@ -30837,8 +30837,9 @@ class Bomb extends excalibur_1.Actor {
     }
     onPostCollision(e) {
         this.vel.y = -0.7 * this.impactVel;
-        this.graphics.use("explode");
-        this.vel = new excalibur_1.Vector(0, 0);
+        // this.graphics.use("explode")
+        // this.vel = new Vector(0,0)
+        // this.kill()
     }
     onPostUpdate(engine, delta) {
         // console.log(this.vel)
@@ -30996,9 +30997,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Samurai = void 0;
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
+const Bomb_1 = __importDefault(__webpack_require__(/*! ./Bomb */ "./app/src/Bomb.ts"));
 const Floor_1 = __webpack_require__(/*! ./Floor */ "./app/src/Floor.ts");
 const resources_1 = __webpack_require__(/*! ./resources */ "./app/src/resources.ts");
 class Samurai extends ex.Actor {
@@ -31070,6 +31075,15 @@ class Samurai extends ex.Actor {
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
             // this.isAttacking1 = true
             this.setAttacking();
+        }
+        // throw bomb
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.A)) {
+            engine.add(new Bomb_1.default({
+                x: this.pos.x + this.width / 2,
+                y: this.pos.y - this.height / 2,
+                xVel: (this.isFacingRight ? 1 : -1) * 400,
+                yVel: -400
+            }));
         }
         /**
          * Set flags

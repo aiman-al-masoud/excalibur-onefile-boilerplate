@@ -50,6 +50,7 @@ export default class Bomb extends Actor{
 
         // this.graphics.use("explode")
         // this.vel = new Vector(0,0)
+        // this.kill()
     }
 
 

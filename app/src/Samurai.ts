@@ -1,5 +1,6 @@
 import * as ex from 'excalibur';
 import { Collider, Graphic, PostCollisionEvent } from 'excalibur';
+import Bomb from './Bomb';
 import { Floor } from './Floor';
 import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet, spriteSheetToAnimation } from './resources';
 
@@ -98,6 +99,16 @@ export class Samurai extends ex.Actor {
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
             // this.isAttacking1 = true
             this.setAttacking()
+        }
+
+        // throw bomb
+        if(engine.input.keyboard.isHeld(ex.Input.Keys.A)){
+            engine.add(new Bomb({
+                x:this.pos.x  + this.width/2,
+                y:this.pos.y - this.height/2,
+                xVel : (this.isFacingRight? 1:-1) * 400,
+                yVel : -400
+            }))
         }
 
 
