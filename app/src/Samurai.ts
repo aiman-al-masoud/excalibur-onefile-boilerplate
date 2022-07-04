@@ -16,8 +16,7 @@ export class Samurai extends ex.Actor {
             pos: new ex.Vector(x, y),
             collisionType: ex.CollisionType.Active,
             collisionGroup: ex.CollisionGroupManager.groupByName("Samurai"),
-            collider: ex.Shape.Box(30, 60, ex.Vector.Half, ex.vec(0, 3)),
-            color: ex.Color.Black
+            collider: ex.Shape.Box(30, 80, ex.Vector.Half, ex.vec(0, 3))
         });
 
         
