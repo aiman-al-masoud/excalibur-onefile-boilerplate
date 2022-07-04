@@ -10,6 +10,7 @@ const samuraiAttack1File = require("../res/samurai/attack1.png")
 const samuraiFallFile = require("../res/samurai/fall.png")
 const samuraiDieFile = require("../res/samurai/die.png")
 const samuraiTakeHitFile = require("../res/samurai/take-hit.png")
+const explosionFile = require("../res/explosion.png")
 
 
 // put in Resources
@@ -21,7 +22,8 @@ const Resources = {
     samuraiAttack1: new ex.ImageSource(samuraiAttack1File.default),
     samuraiFall: new ex.ImageSource(samuraiFallFile.default),
     samuraiDie: new ex.ImageSource(samuraiDieFile.default),
-    samuraiTakeHit: new ex.ImageSource(samuraiTakeHitFile.default)
+    samuraiTakeHit: new ex.ImageSource(samuraiTakeHitFile.default),
+    explosion : new ex.ImageSource(explosionFile.default)
 }
 
 
@@ -66,7 +68,7 @@ const samuraiFallSpriteSheet = imgToSpriteSheet(Resources.samuraiFall, 2, 1, 200
 const samuraiAttack1SpriteSheet = imgToSpriteSheet(Resources.samuraiAttack1, 6, 1, 200, 200)
 const samuraiDieSpriteSheet = imgToSpriteSheet(Resources.samuraiDie, 6, 1, 200, 200)
 const samuraiTakeHitSpriteSheet = imgToSpriteSheet(Resources.samuraiTakeHit, 4, 1, 200, 200)
-
+const explosionSpriteSheet = imgToSpriteSheet(Resources.explosion, 12, 1, 96, 96)
 
 
 // create loader
@@ -77,6 +79,6 @@ for (const res in Resources) {
     loader.addResource((Resources as any)[res]);
 }
 
-export { Resources, loader, samuraiRunSpriteSheet, blockSprite, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiAttack1SpriteSheet, samuraiFallSpriteSheet, samuraiDieSpriteSheet, samuraiTakeHitSpriteSheet, spriteSheetToAnimation }
+export { Resources, loader, samuraiRunSpriteSheet, blockSprite, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiAttack1SpriteSheet, samuraiFallSpriteSheet, samuraiDieSpriteSheet, samuraiTakeHitSpriteSheet, spriteSheetToAnimation, explosionSpriteSheet }
 
 

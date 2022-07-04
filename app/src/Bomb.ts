@@ -1,5 +1,5 @@
-import { Actor, CollisionGroup, CollisionGroupManager, CollisionType, Color, Engine, Graphic, PostCollisionEvent, PreCollisionEvent, Shape, vec, Vector } from "excalibur";
-import { samuraiFallSpriteSheet, spriteSheetToAnimation } from "./resources";
+import { Actor, AnimationStrategy, CollisionGroup, CollisionGroupManager, CollisionType, Color, Engine, Graphic, PostCollisionEvent, PreCollisionEvent, Shape, vec, Vector } from "excalibur";
+import { explosionSpriteSheet, samuraiFallSpriteSheet, spriteSheetToAnimation } from "./resources";
 
 export interface BombArgs{
 
@@ -32,6 +32,9 @@ export default class Bomb extends Actor{
 
     onInitialize(engine:Engine){
 
+        const explode = spriteSheetToAnimation(explosionSpriteSheet, 150, AnimationStrategy.End)
+        this.graphics.add("explode", explode)
+
         this.on("postcollision", e=>this.onPostCollision(e))
         this.on("precollision", e=>this.onPreCollision(e))
     }
@@ -44,6 +47,9 @@ export default class Bomb extends Actor{
 
     onPostCollision(e:PostCollisionEvent){
         this.vel.y = -0.7*this.impactVel
+
+        // this.graphics.use("explode")
+        // this.vel = new Vector(0,0)
     }
 
 
