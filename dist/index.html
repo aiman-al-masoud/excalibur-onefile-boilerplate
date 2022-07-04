@@ -31034,10 +31034,19 @@ class Samurai extends ex.Actor {
             ev.other.vel.y += 800;
         }
     }
+    setAttacking(attackType) {
+        this.isAttacking1 = true;
+        this.collider.set(ex.Shape.Box(250, 80));
+    }
+    stopAttacking(attackType) {
+        this.isAttacking1 = false;
+        this.collider.set(ex.Shape.Box(30, 80));
+    }
     onPreUpdate(engine, delta) {
         // Reset x velocity
         this.vel.x = 0;
-        this.isAttacking1 = false;
+        // this.isAttacking1 = false;
+        this.stopAttacking();
         /**
          * Player input and set flags
          */
@@ -31054,7 +31063,8 @@ class Samurai extends ex.Actor {
             this.vel.y -= 500;
         }
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
-            this.isAttacking1 = true;
+            // this.isAttacking1 = true
+            this.setAttacking();
         }
         /**
          * Set flags

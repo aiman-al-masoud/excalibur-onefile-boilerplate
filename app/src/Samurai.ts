@@ -1,5 +1,5 @@
 import * as ex from 'excalibur';
-import { Graphic, PostCollisionEvent } from 'excalibur';
+import { Collider, Graphic, PostCollisionEvent } from 'excalibur';
 import { Floor } from './Floor';
 import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet, spriteSheetToAnimation } from './resources';
 
@@ -57,12 +57,24 @@ export class Samurai extends ex.Actor {
 
     }
 
+    setAttacking(attackType?:string){
+        this.isAttacking1 = true
+        this.collider.set(ex.Shape.Box(250, 80))
+    }
+
+    stopAttacking(attackType?:string){
+        this.isAttacking1 = false
+        this.collider.set(ex.Shape.Box(30, 80))
+    }
+
 
     onPreUpdate(engine: ex.Engine, delta: number) {
 
         // Reset x velocity
         this.vel.x = 0;
-        this.isAttacking1 = false;
+        // this.isAttacking1 = false;
+        this.stopAttacking()
+
 
         /**
          * Player input and set flags
@@ -84,7 +96,8 @@ export class Samurai extends ex.Actor {
         }
 
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
-            this.isAttacking1 = true
+            // this.isAttacking1 = true
+            this.setAttacking()
         }
 
 
