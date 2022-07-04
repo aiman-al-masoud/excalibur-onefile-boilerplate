@@ -30802,6 +30802,41 @@ var __webpack_exports__webgl = __webpack_exports__.yOA;
 
 /***/ }),
 
+/***/ "./app/src/Bomb.ts":
+/*!*************************!*\
+  !*** ./app/src/Bomb.ts ***!
+  \*************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
+class Bomb extends excalibur_1.Actor {
+    constructor(x, y) {
+        super({
+            name: "Bomb",
+            pos: new excalibur_1.Vector(x, y),
+            collisionType: excalibur_1.CollisionType.Active,
+            collisionGroup: excalibur_1.CollisionGroupManager.groupByName("Bomb"),
+            // collider : Shape.Box(10,10, Vector.Half, vec(0, 3)),
+            // collider : Shape.Circle(10,vec(0, 3) ),
+            color: excalibur_1.Color.Black,
+            radius: 10
+        });
+    }
+    onInitialize(engine) {
+        // const fall = spriteSheetToAnimation(samuraiFallSpriteSheet, 150)
+        // this.graphics.add("g", fall)
+        // this.graphics.use("g")
+    }
+    onPostUpdate(engine, delta) {
+    }
+}
+exports["default"] = Bomb;
+
+
+/***/ }),
+
 /***/ "./app/src/Floor.ts":
 /*!**************************!*\
   !*** ./app/src/Floor.ts ***!
@@ -30886,11 +30921,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
 const Samurai_1 = __webpack_require__(/*! ./Samurai */ "./app/src/Samurai.ts");
 const Floor_1 = __webpack_require__(/*! ./Floor */ "./app/src/Floor.ts");
+const Bomb_1 = __importDefault(__webpack_require__(/*! ./Bomb */ "./app/src/Bomb.ts"));
 class Level1 extends excalibur_1.Scene {
     constructor() {
         super();
@@ -30898,12 +30937,14 @@ class Level1 extends excalibur_1.Scene {
     onInitialize(engine) {
         // create collision groups
         ex.CollisionGroupManager.create("Samurai");
+        ex.CollisionGroupManager.create("Bomb");
         // create actors
         let a = new Samurai_1.Samurai(engine.halfDrawWidth + 100, engine.halfDrawHeight - 100);
         // add actors to the scene
         engine.add(a);
         const floor = new Floor_1.Floor(0, 300, 15, 1);
         engine.add(floor);
+        engine.add(new Bomb_1.default(engine.halfDrawWidth + 100, engine.halfDrawHeight - 100));
         this.camera.clearAllStrategies();
         this.camera.strategy.elasticToActor(a, 0.05, 0.1);
     }
@@ -31084,7 +31125,6 @@ engine.start(resources_1.loader).then(e => {
 });
 // For test hook
 window.engine = engine;
-// (window as any).level = level;
 
 
 /***/ }),
