@@ -1,62 +1,73 @@
 import { Actor, AnimationStrategy, CollisionGroup, CollisionGroupManager, CollisionType, Color, Engine, Graphic, PostCollisionEvent, PreCollisionEvent, Shape, vec, Vector } from "excalibur";
 import { explosionSpriteSheet, samuraiFallSpriteSheet, spriteSheetToAnimation } from "./resources";
 
-export interface BombArgs{
+export interface BombArgs {
 
-    x:number,
-    y:number,
-    xVel:number,
-    yVel :number
+    x: number,
+    y: number,
+    xVel: number,
+    yVel: number
 
 }
 
 
-export default class Bomb extends Actor{
+export default class Bomb extends Actor {
 
     impactVel = 0;
+    collisionsBeforeExplode = 15;
+    collisionsCounter = 0;
 
-    constructor(args:BombArgs){
-        
+    constructor(args: BombArgs) {
+
         super({
-            name : "Bomb",
-            pos : new Vector(args.x,args.y),
-            vel : new Vector(args.xVel, args.yVel),
-            collisionType : CollisionType.Active,
-            collisionGroup : CollisionGroupManager.groupByName("Bomb"),
-            color : Color.Black,
-            radius : 10,
+            name: "Bomb",
+            pos: new Vector(args.x, args.y),
+            vel: new Vector(args.xVel, args.yVel),
+            collisionType: CollisionType.Active,
+            collisionGroup: CollisionGroupManager.groupByName("Bomb"),
+            color: Color.Black,
+            radius: 10,
         })
 
 
     }
 
-    onInitialize(engine:Engine){
+    onInitialize(engine: Engine) {
 
         const explode = spriteSheetToAnimation(explosionSpriteSheet, 150, AnimationStrategy.End)
         this.graphics.add("explode", explode)
 
-        this.on("postcollision", e=>this.onPostCollision(e))
-        this.on("precollision", e=>this.onPreCollision(e))
+        this.on("postcollision", e => this.onPostCollision(e))
+        this.on("precollision", e => this.onPreCollision(e))
     }
 
 
-    onPreCollision(e:PreCollisionEvent){
-        // this.vel.y = -100
+    onPreCollision(e: PreCollisionEvent) {
         this.impactVel = this.vel.y
     }
 
-    onPostCollision(e:PostCollisionEvent){
-        this.vel.y = -0.7*this.impactVel
+    onPostCollision(e: PostCollisionEvent) {
+        this.vel.y = -0.7 * this.impactVel
 
-        // this.graphics.use("explode")
-        // this.vel = new Vector(0,0)
-        // this.kill()
+        this.collisionsCounter++;
+
+        if (this.collisionsCounter >= this.collisionsBeforeExplode) {
+            this.graphics.use("explode")
+            this.vel = new Vector(0,0)
+            // this.kill()
+            setTimeout(()=>{
+                this.kill()
+            }, 
+            1000)
+        }
+
+
     }
 
 
-    
 
-    onPostUpdate(engine:Engine, delta:number ){
+
+    onPostUpdate(engine: Engine, delta: number) {
         // console.log(this.vel)
         // this.vel = new Vector(10, -100)
     }

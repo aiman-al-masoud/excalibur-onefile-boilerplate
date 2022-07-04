@@ -30824,6 +30824,8 @@ class Bomb extends excalibur_1.Actor {
             radius: 10,
         });
         this.impactVel = 0;
+        this.collisionsBeforeExplode = 15;
+        this.collisionsCounter = 0;
     }
     onInitialize(engine) {
         const explode = (0, resources_1.spriteSheetToAnimation)(resources_1.explosionSpriteSheet, 150, excalibur_1.AnimationStrategy.End);
@@ -30832,14 +30834,19 @@ class Bomb extends excalibur_1.Actor {
         this.on("precollision", e => this.onPreCollision(e));
     }
     onPreCollision(e) {
-        // this.vel.y = -100
         this.impactVel = this.vel.y;
     }
     onPostCollision(e) {
         this.vel.y = -0.7 * this.impactVel;
-        // this.graphics.use("explode")
-        // this.vel = new Vector(0,0)
-        // this.kill()
+        this.collisionsCounter++;
+        if (this.collisionsCounter >= this.collisionsBeforeExplode) {
+            this.graphics.use("explode");
+            this.vel = new excalibur_1.Vector(0, 0);
+            // this.kill()
+            setTimeout(() => {
+                this.kill();
+            }, 1000);
+        }
     }
     onPostUpdate(engine, delta) {
         // console.log(this.vel)
