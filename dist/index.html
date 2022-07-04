@@ -30942,15 +30942,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
 const Samurai_1 = __webpack_require__(/*! ./Samurai */ "./app/src/Samurai.ts");
 const Floor_1 = __webpack_require__(/*! ./Floor */ "./app/src/Floor.ts");
-const Bomb_1 = __importDefault(__webpack_require__(/*! ./Bomb */ "./app/src/Bomb.ts"));
 class Level1 extends excalibur_1.Scene {
     constructor() {
         super();
@@ -30965,10 +30961,6 @@ class Level1 extends excalibur_1.Scene {
         engine.add(a);
         const floor = new Floor_1.Floor(0, 300, 15, 1);
         engine.add(floor);
-        engine.add(new Bomb_1.default({ x: engine.halfDrawWidth + 50,
-            y: engine.halfDrawHeight - 100,
-            xVel: 0,
-            yVel: -500 }));
         this.camera.clearAllStrategies();
         this.camera.strategy.elasticToActor(a, 0.05, 0.1);
     }
