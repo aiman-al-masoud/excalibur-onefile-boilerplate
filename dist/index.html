@@ -31082,14 +31082,18 @@ class Samurai extends ex.Actor {
                 this.collider.set(this.largeCollider);
                 break;
             case Animations_1.Animations.ThrowBomb:
-                engine.add(new Bomb_1.default({
-                    x: this.pos.x + this.width / 2,
-                    y: this.pos.y - this.height / 2,
-                    xVel: (this.isFacingRight ? 1 : -1) * 400,
-                    yVel: -400
-                }));
+                this.throwBomb(engine);
                 break;
         }
+    }
+    throwBomb(engine) {
+        // this.isAttacking = true
+        engine.add(new Bomb_1.default({
+            x: this.pos.x + this.width / 2,
+            y: this.pos.y - this.height / 2,
+            xVel: (this.isFacingRight ? 1 : -1) * 400,
+            yVel: -400
+        }));
     }
     stopAttacking() {
         this.isAttacking = false;

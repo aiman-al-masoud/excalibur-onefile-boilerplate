@@ -76,18 +76,26 @@ export class Samurai extends ex.Actor {
                 this.collider.set(this.largeCollider)
                 break
             case Animations.ThrowBomb:
-                
-                    engine.add(new Bomb({
-                        x: this.pos.x + this.width / 2,
-                        y: this.pos.y - this.height / 2,
-                        xVel: (this.isFacingRight ? 1 : -1) * 400,
-                        yVel: -400
-                    }))
-                      
+                 this.throwBomb(engine)
                 break
 
         }
     }
+
+
+
+    throwBomb(engine:Engine){
+
+        // this.isAttacking = true
+        engine.add(new Bomb({
+            x: this.pos.x + this.width / 2,
+            y: this.pos.y - this.height / 2,
+            xVel: (this.isFacingRight ? 1 : -1) * 400,
+            yVel: -400
+        }))
+    }
+
+
 
     stopAttacking() {
         this.isAttacking = false
