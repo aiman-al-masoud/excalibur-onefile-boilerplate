@@ -1,26 +1,34 @@
 import * as ex from 'excalibur';
-import { Collider, Graphic, PostCollisionEvent } from 'excalibur';
+import { Collider, Engine, Graphic, PostCollisionEvent } from 'excalibur';
+import { AttackTypes } from './AttackTypes';
 import Bomb from './Bomb';
 import { Floor } from './Floor';
 import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet, spriteSheetToAnimation } from './resources';
 
 export class Samurai extends ex.Actor {
 
-    public isOnGround = false;
-    public isJumping = false;
-    public isAttacking1 = false
-    public isFacingRight = true; // sprite image in file has to satisfy this
+    public isOnGround = false
+    public isJumping = false
+    public isAttacking = false
+    public attackType: AttackTypes | undefined = undefined
+    public isFacingRight = true // sprite image in file has to satisfy this
+    readonly idleCollider: ex.PolygonCollider;
+    readonly largeCollider: ex.PolygonCollider;
+
 
     constructor(x: number, y: number) {
+        
         super({
             name: 'Samurai',
             pos: new ex.Vector(x, y),
             collisionType: ex.CollisionType.Active,
             collisionGroup: ex.CollisionGroupManager.groupByName("Samurai"),
-            collider: ex.Shape.Box(30, 80, ex.Vector.Half, ex.vec(0, 3))
         });
 
-        
+        this.idleCollider = ex.Shape.Box(30, 80, ex.Vector.Half, ex.vec(0, 3))
+        this.largeCollider = ex.Shape.Box(250, 80)
+        this.collider.set(this.idleCollider)
+
     }
 
 
@@ -51,21 +59,39 @@ export class Samurai extends ex.Actor {
 
         //TODO: check collision strategy==Fixed instead of instanceof
         // other should move when hit 
-        if(this.isAttacking1  && ! (ev.other instanceof Floor) ){
-            ev.other.vel.x += ( this.isFacingRight?1:-1 ) * 500
-            ev.other.vel.y +=  800
+        if (this.isAttacking && !(ev.other instanceof Floor)) {
+            ev.other.vel.x += (this.isFacingRight ? 1 : -1) * 500
+            ev.other.vel.y += 800
         }
 
     }
 
-    setAttacking(attackType?:string){
-        this.isAttacking1 = true
-        this.collider.set(ex.Shape.Box(250, 80))
+
+    setAttacking(attackType: AttackTypes, engine:Engine) {
+        this.attackType = attackType
+        this.isAttacking = true
+
+        switch (attackType) {
+            case AttackTypes.Sword1:
+                this.collider.set(this.largeCollider)
+                break
+            case AttackTypes.ThrowBomb:
+                
+                    engine.add(new Bomb({
+                        x: this.pos.x + this.width / 2,
+                        y: this.pos.y - this.height / 2,
+                        xVel: (this.isFacingRight ? 1 : -1) * 400,
+                        yVel: -400
+                    }))
+                      
+                break
+
+        }
     }
 
-    stopAttacking(attackType?:string){
-        this.isAttacking1 = false
-        this.collider.set(ex.Shape.Box(30, 80))
+    stopAttacking() {
+        this.isAttacking = false
+        this.collider.set(this.idleCollider)
     }
 
 
@@ -96,19 +122,13 @@ export class Samurai extends ex.Actor {
         }
 
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
-            this.setAttacking()
+            this.setAttacking(AttackTypes.Sword1, engine)
         }
 
         // throw bomb
-        if(engine.input.keyboard.isHeld(ex.Input.Keys.A)){
-            engine.add(new Bomb({
-                x:this.pos.x  + this.width/2,
-                y:this.pos.y - this.height/2,
-                xVel : (this.isFacingRight? 1:-1) * 400,
-                yVel : -400
-            }))
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.A)) {
+            this.setAttacking(AttackTypes.ThrowBomb, engine)
         }
-
 
         /**
          * Set flags
@@ -139,8 +159,12 @@ export class Samurai extends ex.Actor {
             this.isJumping = false
         }
 
-        if (this.isAttacking1) {
-            newGraphic = this.graphics.use("attack1")
+        if (this.isAttacking) {
+            switch(this.attackType){
+                case AttackTypes.Sword1:
+                    newGraphic = this.graphics.use("attack1")
+                break
+            }
         }
 
         newGraphic.flipHorizontal = !this.isFacingRight

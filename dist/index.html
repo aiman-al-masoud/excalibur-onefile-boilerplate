@@ -30802,6 +30802,24 @@ var __webpack_exports__webgl = __webpack_exports__.yOA;
 
 /***/ }),
 
+/***/ "./app/src/AttackTypes.ts":
+/*!********************************!*\
+  !*** ./app/src/AttackTypes.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AttackTypes = void 0;
+var AttackTypes;
+(function (AttackTypes) {
+    AttackTypes[AttackTypes["Sword1"] = 0] = "Sword1";
+    AttackTypes[AttackTypes["ThrowBomb"] = 1] = "ThrowBomb";
+})(AttackTypes = exports.AttackTypes || (exports.AttackTypes = {}));
+
+
+/***/ }),
+
 /***/ "./app/src/Bomb.ts":
 /*!*************************!*\
   !*** ./app/src/Bomb.ts ***!
@@ -31002,6 +31020,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Samurai = void 0;
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
+const AttackTypes_1 = __webpack_require__(/*! ./AttackTypes */ "./app/src/AttackTypes.ts");
 const Bomb_1 = __importDefault(__webpack_require__(/*! ./Bomb */ "./app/src/Bomb.ts"));
 const Floor_1 = __webpack_require__(/*! ./Floor */ "./app/src/Floor.ts");
 const resources_1 = __webpack_require__(/*! ./resources */ "./app/src/resources.ts");
@@ -31012,12 +31031,15 @@ class Samurai extends ex.Actor {
             pos: new ex.Vector(x, y),
             collisionType: ex.CollisionType.Active,
             collisionGroup: ex.CollisionGroupManager.groupByName("Samurai"),
-            collider: ex.Shape.Box(30, 80, ex.Vector.Half, ex.vec(0, 3))
         });
         this.isOnGround = false;
         this.isJumping = false;
-        this.isAttacking1 = false;
+        this.isAttacking = false;
+        this.attackType = undefined;
         this.isFacingRight = true; // sprite image in file has to satisfy this
+        this.idleCollider = ex.Shape.Box(30, 80, ex.Vector.Half, ex.vec(0, 3));
+        this.attackOneCollider = ex.Shape.Box(250, 80);
+        this.collider.set(this.idleCollider);
     }
     onInitialize(engine) {
         const run = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiRunSpriteSheet, 150);
@@ -31038,23 +31060,35 @@ class Samurai extends ex.Actor {
         }
         //TODO: check collision strategy==Fixed instead of instanceof
         // other should move when hit 
-        if (this.isAttacking1 && !(ev.other instanceof Floor_1.Floor)) {
+        if (this.isAttacking && !(ev.other instanceof Floor_1.Floor)) {
             ev.other.vel.x += (this.isFacingRight ? 1 : -1) * 500;
             ev.other.vel.y += 800;
         }
     }
-    setAttacking(attackType) {
-        this.isAttacking1 = true;
-        this.collider.set(ex.Shape.Box(250, 80));
+    setAttacking(attackType, engine) {
+        this.attackType = attackType;
+        this.isAttacking = true;
+        switch (attackType) {
+            case AttackTypes_1.AttackTypes.Sword1:
+                this.collider.set(this.attackOneCollider);
+                break;
+            case AttackTypes_1.AttackTypes.ThrowBomb:
+                engine.add(new Bomb_1.default({
+                    x: this.pos.x + this.width / 2,
+                    y: this.pos.y - this.height / 2,
+                    xVel: (this.isFacingRight ? 1 : -1) * 400,
+                    yVel: -400
+                }));
+                break;
+        }
     }
-    stopAttacking(attackType) {
-        this.isAttacking1 = false;
-        this.collider.set(ex.Shape.Box(30, 80));
+    stopAttacking() {
+        this.isAttacking = false;
+        this.collider.set(this.idleCollider);
     }
     onPreUpdate(engine, delta) {
         // Reset x velocity
         this.vel.x = 0;
-        // this.isAttacking1 = false;
         this.stopAttacking();
         /**
          * Player input and set flags
@@ -31072,17 +31106,11 @@ class Samurai extends ex.Actor {
             this.vel.y -= 500;
         }
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
-            // this.isAttacking1 = true
-            this.setAttacking();
+            this.setAttacking(AttackTypes_1.AttackTypes.Sword1, engine);
         }
         // throw bomb
         if (engine.input.keyboard.isHeld(ex.Input.Keys.A)) {
-            engine.add(new Bomb_1.default({
-                x: this.pos.x + this.width / 2,
-                y: this.pos.y - this.height / 2,
-                xVel: (this.isFacingRight ? 1 : -1) * 400,
-                yVel: -400
-            }));
+            this.setAttacking(AttackTypes_1.AttackTypes.ThrowBomb, engine);
         }
         /**
          * Set flags
@@ -31107,8 +31135,12 @@ class Samurai extends ex.Actor {
             newGraphic = this.graphics.use("fall");
             this.isJumping = false;
         }
-        if (this.isAttacking1) {
-            newGraphic = this.graphics.use("attack1");
+        if (this.isAttacking) {
+            switch (this.attackType) {
+                case AttackTypes_1.AttackTypes.Sword1:
+                    newGraphic = this.graphics.use("attack1");
+                    break;
+            }
         }
         newGraphic.flipHorizontal = !this.isFacingRight;
     }
