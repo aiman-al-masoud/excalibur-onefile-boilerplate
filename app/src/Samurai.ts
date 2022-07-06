@@ -61,7 +61,7 @@ export class Samurai extends ex.Actor {
     onPostCollision(ev: PostCollisionEvent) {
 
 
-        if(this.isHanging = ( ev.side == (ex.Side.Left || ex.Side.Right)   &&  ev.other instanceof Floor) ){
+        if(this.isHanging = (  (ev.side == ex.Side.Left || ev.side == ex.Side.Right)   &&  ev.other instanceof Floor  ) ){
             this.vel.y = 0
             this.vel.x = 0
         }

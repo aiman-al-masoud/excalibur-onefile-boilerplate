@@ -31073,7 +31073,7 @@ class Samurai extends ex.Actor {
         this.on("postcollision", ev => this.onPostCollision(ev));
     }
     onPostCollision(ev) {
-        if (this.isHanging = (ev.side == (ex.Side.Left || ex.Side.Right) && ev.other instanceof Floor_1.Floor)) {
+        if (this.isHanging = ((ev.side == ex.Side.Left || ev.side == ex.Side.Right) && ev.other instanceof Floor_1.Floor)) {
             this.vel.y = 0;
             this.vel.x = 0;
         }
