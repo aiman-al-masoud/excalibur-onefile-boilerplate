@@ -14,6 +14,8 @@ export default class Level1 extends Scene{
         // create collision groups
         ex.CollisionGroupManager.create("Samurai");
         ex.CollisionGroupManager.create("Bomb");
+        ex.CollisionGroupManager.create("Floor");
+
         
 
         // create actors

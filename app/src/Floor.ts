@@ -11,7 +11,7 @@ export class Floor extends ex.Actor {
             anchor: ex.Vector.Zero,
             collider: ex.Shape.Box(20 * cols, 15 * rows, ex.Vector.Zero),
             collisionType: ex.CollisionType.Fixed,
-            collisionGroup: ex.CollisionGroupManager.groupByName("floor"),
+            collisionGroup: ex.CollisionGroupManager.groupByName("Floor"),
         });
 
         for (let i = 0; i < this.cols; i++) {
