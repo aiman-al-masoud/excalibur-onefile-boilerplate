@@ -48,6 +48,7 @@ export default class Bomb extends Actor {
 
     onPostCollision(e: PostCollisionEvent) {
         this.vel.y = -0.7 * this.impactVel
+        this.vel.x = 0.9*this.vel.x
 
         this.collisionsCounter++;
 

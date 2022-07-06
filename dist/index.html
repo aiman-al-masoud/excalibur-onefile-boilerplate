@@ -30865,6 +30865,7 @@ class Bomb extends excalibur_1.Actor {
     }
     onPostCollision(e) {
         this.vel.y = -0.7 * this.impactVel;
+        this.vel.x = 0.5 * this.vel.x;
         this.collisionsCounter++;
         if (this.collisionsCounter >= this.collisionsBeforeExplode) {
             this.graphics.use("explode");
