@@ -55,7 +55,7 @@ export default class Bomb extends Actor {
         if (this.collisionsCounter >= this.collisionsBeforeExplode) {
             this.graphics.use("explode")
             this.vel = new Vector(0,0)
-            // this.kill()
+
             setTimeout(()=>{
                 this.kill()
             }, 
