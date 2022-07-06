@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { Collider, Engine, Graphic, PostCollisionEvent } from 'excalibur';
-import { AttackTypes } from './AttackTypes';
+import { Animations } from './Animations';
 import Bomb from './Bomb';
 import { Floor } from './Floor';
 import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet, spriteSheetToAnimation } from './resources';
@@ -10,7 +10,7 @@ export class Samurai extends ex.Actor {
     public isOnGround = false
     public isJumping = false
     public isAttacking = false
-    public attackType: AttackTypes | undefined = undefined
+    public attackType: Animations | undefined = undefined
     public isFacingRight = true // sprite image in file has to satisfy this
     readonly idleCollider: ex.PolygonCollider;
     readonly largeCollider: ex.PolygonCollider;
@@ -40,10 +40,10 @@ export class Samurai extends ex.Actor {
         const fall = spriteSheetToAnimation(samuraiFallSpriteSheet, 150)
         const attack1 = spriteSheetToAnimation(samuraiAttack1SpriteSheet, 50)
 
-        this.graphics.add("run", run)
-        this.graphics.add("idle", idle)
-        this.graphics.add("jump", jump)
-        this.graphics.add("fall", fall)
+        this.graphics.add(Animations.Run, run)
+        this.graphics.add(Animations.Idle, idle)
+        this.graphics.add(Animations.Jump, jump)
+        this.graphics.add(Animations.Fall, fall)
         this.graphics.add("attack1", attack1)
 
         this.on("postcollision", ev => this.onPostCollision(ev))
@@ -67,15 +67,15 @@ export class Samurai extends ex.Actor {
     }
 
 
-    setAttacking(attackType: AttackTypes, engine:Engine) {
+    setAttacking(attackType: Animations, engine:Engine) {
         this.attackType = attackType
         this.isAttacking = true
 
         switch (attackType) {
-            case AttackTypes.Sword1:
+            case Animations.Sword1:
                 this.collider.set(this.largeCollider)
                 break
-            case AttackTypes.ThrowBomb:
+            case Animations.ThrowBomb:
                 
                     engine.add(new Bomb({
                         x: this.pos.x + this.width / 2,
@@ -122,12 +122,12 @@ export class Samurai extends ex.Actor {
         }
 
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
-            this.setAttacking(AttackTypes.Sword1, engine)
+            this.setAttacking(Animations.Sword1, engine)
         }
 
         // throw bomb
         if (engine.input.keyboard.isHeld(ex.Input.Keys.A)) {
-            this.setAttacking(AttackTypes.ThrowBomb, engine)
+            this.setAttacking(Animations.ThrowBomb, engine)
         }
 
         /**
@@ -140,28 +140,28 @@ export class Samurai extends ex.Actor {
         /**
          * change animation 
          */
-        let newGraphic = this.graphics.use("idle");
+        let newGraphic = this.graphics.use(Animations.Idle)
 
         if (this.vel.x === 0) {
-            newGraphic = this.graphics.use("idle")
+            newGraphic = this.graphics.use(Animations.Idle)
         }
 
         if (Math.abs(this.vel.x) > 0) {
-            newGraphic = this.graphics.use("run")
+            newGraphic = this.graphics.use(Animations.Run)
         }
 
         if (this.vel.y < 0) {
-            newGraphic = this.graphics.use("jump")
+            newGraphic = this.graphics.use(Animations.Jump)
         }
 
         if (this.vel.y > 0) {
-            newGraphic = this.graphics.use("fall")
+            newGraphic = this.graphics.use(Animations.Fall)
             this.isJumping = false
         }
 
         if (this.isAttacking) {
             switch(this.attackType){
-                case AttackTypes.Sword1:
+                case Animations.Sword1:
                     newGraphic = this.graphics.use("attack1")
                 break
             }
