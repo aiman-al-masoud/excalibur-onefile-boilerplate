@@ -10,6 +10,7 @@ export enum Animations{
     Jump = "Jump", 
     Fall = "Fall",
     Die = "Die",
-    TakeHit = "TakeHit" 
+    TakeHit = "TakeHit",
+    FastRun = "FastRun"
 
 }
