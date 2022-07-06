@@ -3,7 +3,7 @@ import { Collider, CollisionType, Engine, Graphic, PostCollisionEvent } from 'ex
 import { Animations } from './Animations';
 import Bomb from './Bomb';
 import { Floor } from './Floor';
-import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet, spriteSheetToAnimation } from './resources';
+import { samuraiRunSpriteSheet, Resources, samuraiIdleSpriteSheet, samuraiJumpSpriteSheet, samuraiFallSpriteSheet, samuraiAttack1SpriteSheet, spriteSheetToAnimation, samuraiHangSpriteSheet } from './resources';
 
 export class Samurai extends ex.Actor {
 
@@ -45,7 +45,7 @@ export class Samurai extends ex.Actor {
         const jump = spriteSheetToAnimation(samuraiJumpSpriteSheet, 150)
         const fall = spriteSheetToAnimation(samuraiFallSpriteSheet, 150)
         const attack1 = spriteSheetToAnimation(samuraiAttack1SpriteSheet, 50)
-        const hanging = jump;
+        const hanging = spriteSheetToAnimation(samuraiHangSpriteSheet, 300);
 
         this.graphics.add(Animations.Run, run)
         this.graphics.add(Animations.Idle, idle)
