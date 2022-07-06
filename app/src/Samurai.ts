@@ -73,7 +73,6 @@ export class Samurai extends ex.Actor {
 
         // Reset x velocity
         this.vel.x = 0;
-        // this.isAttacking1 = false;
         this.stopAttacking()
 
 
@@ -97,7 +96,6 @@ export class Samurai extends ex.Actor {
         }
 
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
-            // this.isAttacking1 = true
             this.setAttacking()
         }
 
