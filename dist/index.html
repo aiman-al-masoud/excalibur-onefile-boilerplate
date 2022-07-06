@@ -30987,8 +30987,10 @@ class Level1 extends excalibur_1.Scene {
         let a = new Samurai_1.Samurai(engine.halfDrawWidth + 100, engine.halfDrawHeight - 100);
         // add actors to the scene
         engine.add(a);
-        const floor = new Floor_1.Floor(0, 300, 15, 1);
+        const floor = new Floor_1.Floor(0, 300, 20, 1);
         engine.add(floor);
+        engine.add(new Floor_1.Floor(100, 500, 20, 1));
+        engine.add(new Floor_1.Floor(200, 700, 20, 1));
         this.camera.clearAllStrategies();
         this.camera.strategy.elasticToActor(a, 0.05, 0.1);
     }

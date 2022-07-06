@@ -24,9 +24,13 @@ export default class Level1 extends Scene{
         // add actors to the scene
         engine.add(a)
 
-        const floor = new Floor(0, 300, 15, 1);
+        const floor = new Floor(0, 300, 20, 1);
         engine.add(floor)        
-      
+        engine.add(new Floor(100, 500, 20, 1))
+        engine.add(new Floor(200, 700, 20, 1))
+
+     
+        
         this.camera.clearAllStrategies();
         this.camera.strategy.elasticToActor(a, 0.05, 0.1);
 
