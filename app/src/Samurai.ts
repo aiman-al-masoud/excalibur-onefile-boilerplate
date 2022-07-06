@@ -15,6 +15,8 @@ export class Samurai extends ex.Actor {
     readonly idleCollider: ex.PolygonCollider;
     readonly largeCollider: ex.PolygonCollider;
 
+    public isHanging = false
+
 
     constructor(x: number, y: number) {
         
@@ -43,11 +45,13 @@ export class Samurai extends ex.Actor {
         const jump = spriteSheetToAnimation(samuraiJumpSpriteSheet, 150)
         const fall = spriteSheetToAnimation(samuraiFallSpriteSheet, 150)
         const attack1 = spriteSheetToAnimation(samuraiAttack1SpriteSheet, 50)
+        const hanging = jump;
 
         this.graphics.add(Animations.Run, run)
         this.graphics.add(Animations.Idle, idle)
         this.graphics.add(Animations.Jump, jump)
         this.graphics.add(Animations.Fall, fall)
+        this.graphics.add(Animations.Hanging, hanging)
         this.graphics.add("attack1", attack1)
 
         this.on("postcollision", ev => this.onPostCollision(ev))
@@ -56,16 +60,26 @@ export class Samurai extends ex.Actor {
 
     onPostCollision(ev: PostCollisionEvent) {
 
+
+        if(this.isHanging = ( ev.side == (ex.Side.Left || ex.Side.Right)   &&  ev.other instanceof Floor) ){
+            this.vel.y = 0
+            this.vel.x = 0
+        }
         
-        if (ev.side === ex.Side.Bottom) {
-            this.isOnGround = true
-        }        
+      
 
         // other should move when hit, unless they are fixed
         if (this.isAttacking && ( ev.other.body.collisionType != CollisionType.Fixed ) ) {
             ev.other.vel.x += (this.isFacingRight ? 1 : -1) * 500
             ev.other.vel.y += 800
         }
+
+        if (ev.side === ex.Side.Bottom) {
+            this.isOnGround = true
+        }        
+     
+
+
 
     }
 
@@ -127,8 +141,10 @@ export class Samurai extends ex.Actor {
             this.isFacingRight = true
         }
 
-        if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround) {
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && (this.isOnGround || this.isHanging)  ) {
             this.isJumping = true
+            this.isHanging = false
+            this.isOnGround = false
             this.vel.y -= 500
         }
 
@@ -168,6 +184,10 @@ export class Samurai extends ex.Actor {
         if (this.vel.y > 0) {
             newGraphic = this.graphics.use(Animations.Fall)
             this.isJumping = false
+        }
+
+        if(this.isHanging){
+            newGraphic = this.graphics.use(Animations.Hanging)
         }
 
         if (this.isAttacking) {

@@ -30824,6 +30824,8 @@ var Animations;
     Animations["Fall"] = "Fall";
     Animations["Die"] = "Die";
     Animations["TakeHit"] = "TakeHit";
+    Animations["FastRun"] = "FastRun";
+    Animations["Hanging"] = "Hanging";
 })(Animations = exports.Animations || (exports.Animations = {}));
 
 
@@ -30865,12 +30867,11 @@ class Bomb extends excalibur_1.Actor {
     }
     onPostCollision(e) {
         this.vel.y = -0.7 * this.impactVel;
-        this.vel.x = 0.5 * this.vel.x;
+        this.vel.x = 0.9 * this.vel.x;
         this.collisionsCounter++;
         if (this.collisionsCounter >= this.collisionsBeforeExplode) {
             this.graphics.use("explode");
             this.vel = new excalibur_1.Vector(0, 0);
-            // this.kill()
             setTimeout(() => {
                 this.kill();
             }, 1000);
@@ -31036,6 +31037,7 @@ const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/exc
 const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
 const Animations_1 = __webpack_require__(/*! ./Animations */ "./app/src/Animations.ts");
 const Bomb_1 = __importDefault(__webpack_require__(/*! ./Bomb */ "./app/src/Bomb.ts"));
+const Floor_1 = __webpack_require__(/*! ./Floor */ "./app/src/Floor.ts");
 const resources_1 = __webpack_require__(/*! ./resources */ "./app/src/resources.ts");
 class Samurai extends ex.Actor {
     constructor(x, y) {
@@ -31050,6 +31052,7 @@ class Samurai extends ex.Actor {
         this.isAttacking = false;
         this.attackType = undefined;
         this.isFacingRight = true; // sprite image in file has to satisfy this
+        this.isHanging = false;
         this.idleCollider = ex.Shape.Box(30, 80, ex.Vector.Half, ex.vec(0, 3));
         this.largeCollider = ex.Shape.Box(250, 80);
         this.collider.set(this.idleCollider);
@@ -31060,21 +31063,27 @@ class Samurai extends ex.Actor {
         const jump = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiJumpSpriteSheet, 150);
         const fall = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiFallSpriteSheet, 150);
         const attack1 = (0, resources_1.spriteSheetToAnimation)(resources_1.samuraiAttack1SpriteSheet, 50);
+        const hanging = jump;
         this.graphics.add(Animations_1.Animations.Run, run);
         this.graphics.add(Animations_1.Animations.Idle, idle);
         this.graphics.add(Animations_1.Animations.Jump, jump);
         this.graphics.add(Animations_1.Animations.Fall, fall);
+        this.graphics.add(Animations_1.Animations.Hanging, hanging);
         this.graphics.add("attack1", attack1);
         this.on("postcollision", ev => this.onPostCollision(ev));
     }
     onPostCollision(ev) {
-        if (ev.side === ex.Side.Bottom) {
-            this.isOnGround = true;
+        if (this.isHanging = (ev.side == (ex.Side.Left || ex.Side.Right) && ev.other instanceof Floor_1.Floor)) {
+            this.vel.y = 0;
+            this.vel.x = 0;
         }
         // other should move when hit, unless they are fixed
         if (this.isAttacking && (ev.other.body.collisionType != excalibur_1.CollisionType.Fixed)) {
             ev.other.vel.x += (this.isFacingRight ? 1 : -1) * 500;
             ev.other.vel.y += 800;
+        }
+        if (ev.side === ex.Side.Bottom) {
+            this.isOnGround = true;
         }
     }
     setAttacking(attackType, engine) {
@@ -31117,8 +31126,10 @@ class Samurai extends ex.Actor {
             this.vel.x = 150;
             this.isFacingRight = true;
         }
-        if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && this.isOnGround) {
+        if (engine.input.keyboard.isHeld(ex.Input.Keys.Up) && (this.isOnGround || this.isHanging)) {
             this.isJumping = true;
+            this.isHanging = false;
+            this.isOnGround = false;
             this.vel.y -= 500;
         }
         if (engine.input.keyboard.isHeld(ex.Input.Keys.Space)) {
@@ -31150,6 +31161,9 @@ class Samurai extends ex.Actor {
         if (this.vel.y > 0) {
             newGraphic = this.graphics.use(Animations_1.Animations.Fall);
             this.isJumping = false;
+        }
+        if (this.isHanging) {
+            newGraphic = this.graphics.use(Animations_1.Animations.Hanging);
         }
         if (this.isAttacking) {
             switch (this.attackType) {
