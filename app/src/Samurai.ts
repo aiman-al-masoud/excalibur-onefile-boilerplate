@@ -1,5 +1,5 @@
 import * as ex from 'excalibur';
-import { Collider, Engine, Graphic, PostCollisionEvent } from 'excalibur';
+import { Collider, CollisionType, Engine, Graphic, PostCollisionEvent } from 'excalibur';
 import { Animations } from './Animations';
 import Bomb from './Bomb';
 import { Floor } from './Floor';
@@ -27,7 +27,11 @@ export class Samurai extends ex.Actor {
 
         this.idleCollider = ex.Shape.Box(30, 80, ex.Vector.Half, ex.vec(0, 3))
         this.largeCollider = ex.Shape.Box(250, 80)
-        this.collider.set(this.idleCollider)
+        this.collider.set(this.idleCollider);
+
+        
+
+  
 
     }
 
@@ -52,14 +56,13 @@ export class Samurai extends ex.Actor {
 
     onPostCollision(ev: PostCollisionEvent) {
 
+        
         if (ev.side === ex.Side.Bottom) {
             this.isOnGround = true
-        }
+        }        
 
-
-        //TODO: check collision strategy==Fixed instead of instanceof
-        // other should move when hit 
-        if (this.isAttacking && !(ev.other instanceof Floor)) {
+        // other should move when hit, unless they are fixed
+        if (this.isAttacking && ( ev.other.body.collisionType != CollisionType.Fixed ) ) {
             ev.other.vel.x += (this.isFacingRight ? 1 : -1) * 500
             ev.other.vel.y += 800
         }

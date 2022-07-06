@@ -30924,7 +30924,7 @@ class Floor extends ex.Actor {
             anchor: ex.Vector.Zero,
             collider: ex.Shape.Box(20 * cols, 15 * rows, ex.Vector.Zero),
             collisionType: ex.CollisionType.Fixed,
-            collisionGroup: ex.CollisionGroupManager.groupByName("floor"),
+            collisionGroup: ex.CollisionGroupManager.groupByName("Floor"),
         });
         this.cols = cols;
         this.rows = rows;
@@ -30982,6 +30982,7 @@ class Level1 extends excalibur_1.Scene {
         // create collision groups
         ex.CollisionGroupManager.create("Samurai");
         ex.CollisionGroupManager.create("Bomb");
+        ex.CollisionGroupManager.create("Floor");
         // create actors
         let a = new Samurai_1.Samurai(engine.halfDrawWidth + 100, engine.halfDrawHeight - 100);
         // add actors to the scene
@@ -31029,9 +31030,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Samurai = void 0;
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
+const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
 const Animations_1 = __webpack_require__(/*! ./Animations */ "./app/src/Animations.ts");
 const Bomb_1 = __importDefault(__webpack_require__(/*! ./Bomb */ "./app/src/Bomb.ts"));
-const Floor_1 = __webpack_require__(/*! ./Floor */ "./app/src/Floor.ts");
 const resources_1 = __webpack_require__(/*! ./resources */ "./app/src/resources.ts");
 class Samurai extends ex.Actor {
     constructor(x, y) {
@@ -31067,9 +31068,8 @@ class Samurai extends ex.Actor {
         if (ev.side === ex.Side.Bottom) {
             this.isOnGround = true;
         }
-        //TODO: check collision strategy==Fixed instead of instanceof
-        // other should move when hit 
-        if (this.isAttacking && !(ev.other instanceof Floor_1.Floor)) {
+        // other should move when hit, unless they are fixed
+        if (this.isAttacking && (ev.other.body.collisionType != excalibur_1.CollisionType.Fixed)) {
             ev.other.vel.x += (this.isFacingRight ? 1 : -1) * 500;
             ev.other.vel.y += 800;
         }
