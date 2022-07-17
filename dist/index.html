@@ -30945,6 +30945,44 @@ exports.Floor = Floor;
 
 /***/ }),
 
+/***/ "./app/src/Hud.ts":
+/*!************************!*\
+  !*** ./app/src/Hud.ts ***!
+  \************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const excalibur_1 = __webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js");
+class Hud extends excalibur_1.ScreenElement {
+    constructor(x, y) {
+        super({
+            x: x,
+            y: y,
+            width: 50,
+            height: 50,
+            color: excalibur_1.Color.Black,
+            name: "HUD"
+        });
+    }
+    onInitialize() {
+        this.on('pointerup', () => {
+            alert("I've been clicked");
+        });
+        this.on('pointerenter', () => {
+            this.graphics.show('hover');
+        });
+        this.on('pointerleave', () => {
+            this.graphics.show('idle');
+        });
+    }
+}
+exports["default"] = Hud;
+//engine.scenes.level1.entities
+
+
+/***/ }),
+
 /***/ "./app/src/Level1.ts":
 /*!***************************!*\
   !*** ./app/src/Level1.ts ***!
@@ -31212,6 +31250,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // import {Engine, Color, Physics, Vector} from 'excalibur'
 const ex = __importStar(__webpack_require__(/*! excalibur */ "./node_modules/excalibur/build/esm/excalibur.js"));
+const Hud_1 = __importDefault(__webpack_require__(/*! ./Hud */ "./app/src/Hud.ts"));
 const Level1_1 = __importDefault(__webpack_require__(/*! ./Level1 */ "./app/src/Level1.ts"));
 const resources_1 = __webpack_require__(/*! ./resources */ "./app/src/resources.ts");
 const engine = new ex.Engine({
@@ -31227,6 +31266,7 @@ ex.Physics.acc = new ex.Vector(0, 800); // 800 pixels/s^2
 // add a Scene 
 engine.addScene("level1", new Level1_1.default());
 engine.goToScene("level1");
+engine.add(new Hud_1.default(0, 0));
 engine.start(resources_1.loader).then(e => {
     console.log("game started!");
 });

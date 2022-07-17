@@ -1,5 +1,6 @@
 // import {Engine, Color, Physics, Vector} from 'excalibur'
 import *  as ex from 'excalibur' 
+import Hud from './Hud'
 import Level1 from './Level1'
 import { loader } from './resources'
 
@@ -20,6 +21,9 @@ engine.addScene("level1", new Level1())
 engine.goToScene("level1")
 
 
+engine.add(new Hud(0, 0))
+
+
 engine.start(loader).then(e=>{
     console.log("game started!")
 });
@@ -27,6 +31,9 @@ engine.start(loader).then(e=>{
 
 // For test hook
 (window as any).engine = engine;
+
+
+
 
 
 
