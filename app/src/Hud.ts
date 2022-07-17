@@ -1,6 +1,6 @@
 import { Color, ScreenElement } from "excalibur";
 
-
+// https://excaliburjs.com/docs/ui
 
 export default class Hud extends ScreenElement {
 
